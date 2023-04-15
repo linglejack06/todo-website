@@ -10,4 +10,4 @@ import Dom from './modules/dom';
 // let token = PubSub.subscribe('msg', subscriber);
 
 // PubSub.publish('msg', 'hello world');
-
+Dom.renderHome();

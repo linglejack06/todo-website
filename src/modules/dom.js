@@ -1,3 +1,5 @@
+import Controller from './controller';
+
 export default (function Dom () {
     const _page = document.getElementById('content');
     const _projectList = document.createElement('ul');
@@ -23,23 +25,25 @@ export default (function Dom () {
         const title = document.createElement('h1');
         title.textContent = 'To Do It';
         title.classList.add('title');
+        head.appendChild(title);
         const projectsButton = document.createElement('button');
         projectsButton.textContent = 'All Projects';
         projectsButton.classList.add('all-proj-button');
+        head.appendChild(projectsButton);
     }
     const _renderSidebar = (sidebar, project) => {
         sidebar.innerHTML = '';
-        const project = document.createElement('li');
-        project.textContet = project.title;
-        project.classList.add('proj-link');
-        _projectList.appendChild(project);
-        sidebar.appendChild(projectList);
+        const proj = document.createElement('li');
+        proj.textContent = project.getTitle();
+        proj.classList.add('proj-link');
+        _projectList.appendChild(proj);
+        sidebar.appendChild(_projectList);
         sidebar.appendChild(_addProjBtn);
     }
     const renderHome = () => {
         const basicStructure = _renderStructure();
         _renderHead(basicStructure.head);
-        _renderSidebar(basicStructure.sidebar, controller.getDefaultProject())
+        _renderSidebar(basicStructure.sidebar, Controller.getDefaultProject())
     }
     return { renderHome }
 }) ();
