@@ -26,6 +26,7 @@
     "webpack-dev-server": "^4.13.2"
   },
   "dependencies": {
+    "date-fns": "^2.29.3",
     "prettier": "2.8.7",
     "pubsub-js": "^1.9.4"
   },

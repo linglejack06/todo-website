@@ -1,9 +1,13 @@
-export default function Task(title, date, desc, priority) {
+import { format } from 'date-fns';
+
+export default function Task(title, dateInput, desc, priority) {
     let _isCompleted = false;
     let _title = title;
-    let _date = date;
+    // date input should be of type datetime-local
+    let _date = new Date(dateInput);
     let _desc = desc;
     let _priority = priority;
+
     const toggleComplete = () => {
         if(_isCompleted) {
             _isCompleted = false;
@@ -24,5 +28,10 @@ export default function Task(title, date, desc, priority) {
         _desc = desc;
     }
     const getDesc = () => _desc;
-    return { getTitle, setTitle, getPriority, setPriority, setDesc, getDesc, toggleComplete, isComplete }
+    const getFormattedDate = () => format (_date, 'Pp');
+    const getDate = () => _date;
+    const setDate = (dateInput) => {
+        _date = new Date(dateInput);
+    }
+    return { getTitle, setTitle, getPriority, setPriority, setDesc, getDesc, toggleComplete, isComplete, getFormattedDate, getDate, setDate, _date }
 }
