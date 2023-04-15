@@ -1,4 +1,5 @@
 import Controller from './controller';
+import PubSub from 'pubsub-js';
 
 export default (function Dom () {
     const _page = document.getElementById('content');
@@ -6,7 +7,7 @@ export default (function Dom () {
     _projectList.classList.add('proj-list');
     const _addProjBtn = document.createElement('button');
     _addProjBtn.classList.add('new-proj-btn');
-    const _renderStructure = () => {
+    const _basicStructure = (() => {
         const head = document.createElement('div');
         head.classList.add('head');
         _page.appendChild(head);
@@ -20,7 +21,7 @@ export default (function Dom () {
         foot.classList.add('foot');
         _page.appendChild(foot);
         return { head, sidebar, main, foot };
-    }
+    }) ();
     const _renderHead = (head) => {
         const title = document.createElement('h1');
         title.textContent = 'To Do It';
@@ -31,19 +32,22 @@ export default (function Dom () {
         projectsButton.classList.add('all-proj-button');
         head.appendChild(projectsButton);
     }
-    const _renderSidebar = (sidebar, project) => {
-        sidebar.innerHTML = '';
+    const _renderSidebar = (project) => {
+        _basicStructure.sidebar.innerHTML = '';
         const proj = document.createElement('li');
         proj.textContent = project.getTitle();
         proj.classList.add('proj-link');
         _projectList.appendChild(proj);
-        sidebar.appendChild(_projectList);
-        sidebar.appendChild(_addProjBtn);
+        _basicStructure.sidebar.appendChild(_projectList);
+        _basicStructure.sidebar.appendChild(_addProjBtn);
     }
     const renderHome = () => {
-        const basicStructure = _renderStructure();
-        _renderHead(basicStructure.head);
-        _renderSidebar(basicStructure.sidebar, Controller.getDefaultProject())
+        _renderHead(_basicStructure.head);
+        _renderSidebar(Controller.getDefaultProject())
     }
+    const _projSubscriber = (msg, proj) => {
+        _renderSidebar(proj);
+    }
+    PubSub.subscribe('proj added', _projSubscriber);
     return { renderHome }
 }) ();

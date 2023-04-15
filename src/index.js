@@ -2,6 +2,7 @@ import PubSub from 'pubsub-js';
 import Task from './modules/task';
 import Project from './modules/project';
 import Dom from './modules/dom';
+import Controller from './modules/controller';
 
 // EXAMPLE
 // let subscriber = (msg, data) => {
@@ -10,4 +11,6 @@ import Dom from './modules/dom';
 // let token = PubSub.subscribe('msg', subscriber);
 
 // PubSub.publish('msg', 'hello world');
+
 Dom.renderHome();
+Controller.addNewProject('garden');
