@@ -26,7 +26,18 @@ eval("/* module decorator */ module = __webpack_require__.nmd(module);\n/**\n * 
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pubsub-js */ \"./node_modules/pubsub-js/src/pubsub.js\");\n/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(pubsub_js__WEBPACK_IMPORTED_MODULE_0__);\n\n// EXAMPLE\nlet subscriber = (msg, data) => {\n    console.log(msg, data);\n}\nlet token = pubsub_js__WEBPACK_IMPORTED_MODULE_0___default().subscribe('msg', subscriber);\n\npubsub_js__WEBPACK_IMPORTED_MODULE_0___default().publish('msg', 'hello world');\n\n\n\n//# sourceURL=webpack://todo-website/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pubsub-js */ \"./node_modules/pubsub-js/src/pubsub.js\");\n/* harmony import */ var pubsub_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(pubsub_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _modules_task__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/task */ \"./src/modules/task.js\");\n\n\n// EXAMPLE\n// let subscriber = (msg, data) => {\n//     console.log(msg, data);\n// }\n// let token = PubSub.subscribe('msg', subscriber);\n\n// PubSub.publish('msg', 'hello world');\nlet task = (0,_modules_task__WEBPACK_IMPORTED_MODULE_1__[\"default\"])('clean dogs', 'february', 'clean dogs with soap', 'orange');\nconsole.log(task);\ntask.setDesc('boob');\nconsole.log(task.getDesc());\n\n\n//# sourceURL=webpack://todo-website/./src/index.js?");
+
+/***/ }),
+
+/***/ "./src/modules/task.js":
+/*!*****************************!*\
+  !*** ./src/modules/task.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Task)\n/* harmony export */ });\nfunction Task(title, date, desc, priority) {\n    let _isCompleted = false;\n    let _title = title;\n    let _date = date;\n    let _desc = desc;\n    let _priority = priority;\n    const toggleComplete = () => {\n        if(_isCompleted) {\n            _isCompleted = false;\n        } else {\n            _isCompleted = true;\n        }\n    }\n    const isComplete = () => _isCompleted;\n    const setTitle = (title) => {\n        _title = title\n    }\n    const getTitle = () => _title;\n    const setPriority = (priority) => {\n        _priority = priority;\n    }\n    const getPriority = () => _priority;\n    const setDesc = (desc) => {\n        _desc = desc;\n    }\n    const getDesc = () => _desc;\n    return { getTitle, setTitle, getPriority, setPriority, setDesc, getDesc, toggleComplete, isComplete }\n}\n\n//# sourceURL=webpack://todo-website/./src/modules/task.js?");
 
 /***/ })
 
