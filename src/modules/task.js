@@ -33,5 +33,5 @@ export default function Task(title, dateInput, desc, priority) {
     const setDate = (dateInput) => {
         _date = new Date(dateInput);
     }
-    return { getTitle, setTitle, getPriority, setPriority, setDesc, getDesc, toggleComplete, isComplete, getFormattedDate, getDate, setDate, _date }
+    return { getTitle, setTitle, getPriority, setPriority, setDesc, getDesc, toggleComplete, isComplete, getFormattedDate, getDate, setDate }
 }
