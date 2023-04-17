@@ -91,7 +91,12 @@ export default (function Dom () {
     }
     const _projSubscriber = (msg, proj) => {
         _renderSidebar(proj);
+        _renderDashboard(proj);
+    }
+    const _taskSubscriber = (msg, proj) => {
+        _renderDashboard(proj)
     }
     PubSub.subscribe('proj added', _projSubscriber);
+    PubSub.subscribe('task added', _taskSubscriber);
     return { renderHome }
 }) ();

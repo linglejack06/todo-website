@@ -19,7 +19,7 @@ export default (function Controller () {
         const project = findProject(projectTitle);
         if (project !== null) {
             project.appendTask(task);
-            PubSub.publish('task added', task);
+            PubSub.publish('task added', project);
         } else {
             return;
         }
