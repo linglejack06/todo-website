@@ -5,7 +5,7 @@ export default function Project (title) {
         _title = title;
     }
     const getTitle = () => _title;
-    const addTask = (task) => {
+    const appendTask = (task) => {
         // wont allow duplicates
         if (_tasks.includes(task)) {
             return;
@@ -19,5 +19,5 @@ export default function Project (title) {
         }
     }
     const getTasks = () => _tasks;
-    return { setTitle, getTitle, addTask, deleteTask, getTasks }
+    return { setTitle, getTitle, appendTask, deleteTask, getTasks }
 }

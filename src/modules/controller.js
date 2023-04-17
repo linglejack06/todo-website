@@ -18,18 +18,21 @@ export default (function Controller () {
         const task = Task(taskTitle, date, desc, priority);
         const project = findProject(projectTitle);
         if (project !== null) {
-            project.addTask(task);
+            project.appendTask(task);
             PubSub.publish('task added', task);
         } else {
             return;
         }
     }
     const findProject = (title) => {
+        let correctProject;
         _projects.forEach(project => {
-            if(project.title === title) {
-                return project;
-            } 
+            if(project.getTitle() === title) {
+                correctProject = project;
+            }
         })
+        return correctProject;
     }
+    addTask('Home Project', 'Clean home', new Date('2012-02-12'), 'clean all rooms', 'green');
     return { getDefaultProject, addNewProject, addTask };
 }) ();

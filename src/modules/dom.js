@@ -17,10 +17,7 @@ export default (function Dom () {
         const main = document.createElement('div');
         main.classList.add('main');
         _page.appendChild(main);
-        const foot = document.createElement('div');
-        foot.classList.add('foot');
-        _page.appendChild(foot);
-        return { head, sidebar, main, foot };
+        return { head, sidebar, main };
     }) ();
     const _renderHead = (head) => {
         const title = document.createElement('h1');
@@ -41,9 +38,31 @@ export default (function Dom () {
         _basicStructure.sidebar.appendChild(_projectList);
         _basicStructure.sidebar.appendChild(_addProjBtn);
     }
+    const _renderTaskBtn = () => {
+
+    }
+    const _createTaskCard = () => {
+        
+    }
+    const _renderDashboard = (project) => {
+        const title = document.createElement('h2');
+        title.textContent = project.getTitle();
+        title.classList.add('proj-title');
+        _basicStructure.main.appendChild(title);
+        const tasks = project.getTasks();
+        if (tasks.length !== 0) {
+            tasks.forEach(task => {
+                let taskCard = _createTaskCard(task);
+                _basicStructure.main.appendChild(taskCard);
+            });
+        }
+        _renderTaskBtn(); 
+    }
     const renderHome = () => {
+        const defaultProject = Controller.getDefaultProject()
         _renderHead(_basicStructure.head);
-        _renderSidebar(Controller.getDefaultProject())
+        _renderSidebar(defaultProject);
+        _renderDashboard(defaultProject);
     }
     const _projSubscriber = (msg, proj) => {
         _renderSidebar(proj);
