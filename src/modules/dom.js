@@ -7,6 +7,8 @@ export default (function Dom () {
     _projectList.classList.add('proj-list');
     const _addProjBtn = document.createElement('button');
     _addProjBtn.classList.add('new-proj-btn');
+    let _taskBtn;
+    const _checkBoxes = [];
     const _basicStructure = (() => {
         const head = document.createElement('div');
         head.classList.add('head');
@@ -39,10 +41,34 @@ export default (function Dom () {
         _basicStructure.sidebar.appendChild(_addProjBtn);
     }
     const _renderTaskBtn = () => {
-
+        const btn = document.createElement('button');
+        btn.classList.add('add-task-btn');
+        btn.textContent = 'Add New Task';
+        _taskBtn = btn;
+        _basicStructure.main.appendChild(btn);
     }
-    const _createTaskCard = () => {
-        
+    const _renderTaskCard = (task) => {
+        const cardContainer = document.createElement('div');
+        cardContainer.classList.add('card-container', task.getPriority());
+
+        const checkbox = document.createElement('input');
+        checkbox.setAttribute('type', 'checkbox');
+        checkbox.setAttribute('id', 'completed');
+        checkbox.classList.add('task-complete-check');
+        _checkBoxes.push(checkbox);
+        cardContainer.appendChild(checkbox);
+
+        const title = document.createElement('h3');
+        title.classList.add('task-title');
+        title.textContent = task.getTitle();
+        cardContainer.appendChild(title);
+
+        const date = document.createElement('h3');
+        date.classList.add('task-date');
+        date.textContent = task.getFormattedDate();
+        cardContainer.appendChild(date);
+
+        _basicStructure.main.appendChild(cardContainer);
     }
     const _renderDashboard = (project) => {
         const title = document.createElement('h2');
@@ -52,8 +78,7 @@ export default (function Dom () {
         const tasks = project.getTasks();
         if (tasks.length !== 0) {
             tasks.forEach(task => {
-                let taskCard = _createTaskCard(task);
-                _basicStructure.main.appendChild(taskCard);
+                _renderTaskCard(task);
             });
         }
         _renderTaskBtn(); 
