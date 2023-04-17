@@ -33,6 +33,16 @@ export default (function Controller () {
         })
         return correctProject;
     }
+    const findTask = (taskTitle, projectTitle) => {
+        const project = findProject(projectTitle);
+        let correctTask;
+        project.getTasks().forEach(task => {
+            if (task.getTitle() === taskTitle) {
+                correctTask = task;
+            }
+        });
+        return correctTask;
+    }
     addTask('Home Project', 'Clean home', new Date('2012-02-12'), 'clean all rooms', 'green');
-    return { getDefaultProject, addNewProject, addTask };
+    return { getDefaultProject, addNewProject, addTask, findProject, findTask };
 }) ();

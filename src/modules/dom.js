@@ -55,6 +55,8 @@ export default (function Dom () {
         checkbox.setAttribute('type', 'checkbox');
         checkbox.setAttribute('id', 'completed');
         checkbox.classList.add('task-complete-check');
+        checkbox.dataset.task = task.getTitle();
+        checkbox.dataset.project = project.getTitle();
         _checkBoxes.push(checkbox);
         cardContainer.appendChild(checkbox);
 
@@ -78,7 +80,7 @@ export default (function Dom () {
         const tasks = project.getTasks();
         if (tasks.length !== 0) {
             tasks.forEach(task => {
-                _renderTaskCard(task);
+                _renderTaskCard(task, project);
             });
         }
         _renderTaskBtn(); 
@@ -88,6 +90,7 @@ export default (function Dom () {
         _renderHead(_basicStructure.head);
         _renderSidebar(defaultProject);
         _renderDashboard(defaultProject);
+        _addEvents();
     }
     const _projSubscriber = (msg, proj) => {
         _renderSidebar(proj);
@@ -96,7 +99,16 @@ export default (function Dom () {
     const _taskSubscriber = (msg, proj) => {
         _renderDashboard(proj)
     }
-    PubSub.subscribe('proj added', _projSubscriber);
-    PubSub.subscribe('task added', _taskSubscriber);
+    const _addEvents = () => {
+        PubSub.subscribe('proj added', _projSubscriber);
+        PubSub.subscribe('task added', _taskSubscriber);
+        _checkBoxes.forEach(checkbox => {
+            checkbox.addEventListener('input', () => {
+                const task = Controller.findTask(checkbox.dataset.project, checkbox.dataset.task);
+                task.toggleComplete();
+                console.log(task.isComplete());
+            })
+        })
+    }
     return { renderHome }
 }) ();

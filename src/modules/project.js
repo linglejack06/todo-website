@@ -18,6 +18,7 @@ export default function Project (title) {
             _tasks.pop(task);
         }
     }
+    const findTask = (task) => _tasks.find(task);
     const getTasks = () => _tasks;
-    return { setTitle, getTitle, appendTask, deleteTask, getTasks }
+    return { setTitle, getTitle, appendTask, deleteTask, getTasks, findTask }
 }
