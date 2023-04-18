@@ -9,9 +9,14 @@ export default (function Dom () {
     let _addTaskBtn;
     let _deleteTaskBtn;
     let _taskFormBtn;
+    let _closeTaskFormBtn;
     let _projFormBtn;
+    let _currentProj;
     const _taskForm = `
-        <h2 class='title'>New Task</h2>
+        <div class='form-header'>
+            <h2 class='title'>New Task</h2>
+            <button type='button' class='close-form' id='close-task-form'>X</button>
+        </div>
         <div class='input-container'>
             <label for='task-name'>Task Title</label>
             <input type='text' id='task-name' name='title' class='task-name'>
@@ -32,6 +37,7 @@ export default (function Dom () {
                 <option value='high'>High</option>
             </select>
         </div>
+        <button type='submit' class='submit-btn' id='submit-task-btn'>Add Task</button>
     `;
     const _checkBoxes = [];
     const _basicStructure = (() => {
@@ -130,6 +136,25 @@ export default (function Dom () {
         form.classList.add('form');
         form.innerHTML = _taskForm;
         newPage.appendChild(form);
+        _taskFormBtn = document.getElementById('submit-task-btn');
+        _closeTaskFormBtn = document.getElementById('close-task-form')
+    }
+    const _getFormInputs = (type) => {
+        if (type === 'task') {
+            const title = document.getElementById('task-title').value;
+            const desc = document.getElementById('task-description').value;
+            const date = document.getElementById('task-date').value;
+            const priority = document.getElementById('task-priority').value;
+            return { title, desc, date, priority }
+        } else if (type === 'project') {
+
+        }
+    }
+    const _closeTaskForm = () => {
+        const newPage = document.querySelector('form-container');
+        newPage.innerHTML = '';
+        newPage.style.display = 'none';
+        _page.style.display = 'grid';
     }
     const _renderProjectForm = () => {
         
@@ -142,6 +167,7 @@ export default (function Dom () {
         _addEvents();
     }
     const _projSubscriber = (msg, proj) => {
+        _currentProj = proj;
         _renderSidebar(proj);
         _renderDashboard(proj);
     }
@@ -160,6 +186,15 @@ export default (function Dom () {
         _deleteTaskBtn.addEventListener('click', () => {
             Controller.deleteTask(_deleteTaskBtn.dataset.project, _deleteTaskBtn.dataset.task);
         });
+        //listener for submitting task
+        _taskFormBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const taskInputs = _getFormInputs('task');
+            Controller.addTask(_currentProj.getTitle(), taskInputs.title, taskInputs.date, taskInputs.desc, taskInputs.priority);
+            _closeTaskForm();
+        })
+        // dont add the task only close the form
+        _closeTaskFormBtn.addEventListener('click', _closeTaskForm);
     }
     return { renderHome }
 }) ();
