@@ -5,9 +5,11 @@ export default (function Dom () {
     const _page = document.getElementById('content');
     const _projectList = document.createElement('ul');
     _projectList.classList.add('proj-list');
-    const _addProjBtn = document.createElement('button');
-    _addProjBtn.classList.add('new-proj-btn');
-    let _taskBtn;
+    let _addProjBtn;
+    let _addTaskBtn;
+    let _deleteTaskBtn;
+    let _taskFormBtn;
+    let _projFormBtn;
     const _checkBoxes = [];
     const _basicStructure = (() => {
         const head = document.createElement('div');
@@ -34,13 +36,16 @@ export default (function Dom () {
         proj.classList.add('proj-link');
         _projectList.appendChild(proj);
         _basicStructure.sidebar.appendChild(_projectList);
+        _addProjBtn = document.createElement('button');
+        _addProjBtn.classList.add('new-proj-btn');
+        _addProjBtn.textContent = 'Add Project';
         _basicStructure.sidebar.appendChild(_addProjBtn);
     }
     const _renderTaskBtn = () => {
         const btn = document.createElement('button');
         btn.classList.add('add-task-btn');
         btn.textContent = 'Add New Task';
-        _taskBtn = btn;
+        _addTaskBtn = btn;
         _basicStructure.main.appendChild(btn);
     }
     const _renderTaskCard = (task, project) => {
@@ -69,6 +74,14 @@ export default (function Dom () {
         date.classList.add('task-date');
         date.textContent = task.getFormattedDate();
         cardContainer.appendChild(date);
+
+        const btn = document.createElement('button');
+        btn.classList.add('delete-task-btn');
+        btn.textContent = 'X';
+        btn.dataset.task = task.getTitle();
+        btn.dataset.project = project.getTitle();
+        _deleteTaskBtn = btn;
+        cardContainer.appendChild(btn);
 
         _basicStructure.main.appendChild(cardContainer);
     }
@@ -103,11 +116,15 @@ export default (function Dom () {
     const _addEvents = () => {
         PubSub.subscribe('proj added', _projSubscriber);
         PubSub.subscribe('task added', _taskSubscriber);
+        PubSub.subscribe('task deleted', _taskSubscriber);
         _checkBoxes.forEach(checkbox => {
             checkbox.addEventListener('input', () => {
                 Controller.toggleTask(checkbox.dataset.project, checkbox.dataset.task);
             });
-        })
+        });
+        _deleteTaskBtn.addEventListener('click', () => {
+            Controller.deleteTask(_deleteTaskBtn.dataset.project, _deleteTaskBtn.dataset.task);
+        });
     }
     return { renderHome }
 }) ();

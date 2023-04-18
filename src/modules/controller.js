@@ -50,6 +50,12 @@ export default (function Controller () {
         task.toggleComplete();
         console.log(task.isComplete());
     }
+    const deleteTask = (projectTitle, taskTitle) => {
+        const task = findTask(projectTitle, taskTitle);
+        const project = findProject(projectTitle);
+        project.deleteTask(task);
+        PubSub.publish('task deleted', project);
+    }
     addTask('Home Project', 'Clean home', new Date('2012-02-12'), 'clean all rooms', 'green');
-    return { getDefaultProject, addNewProject, addTask, findProject, findTask, toggleTask };
+    return { getDefaultProject, addNewProject, addTask, findProject, findTask, toggleTask, deleteTask };
 }) ();
