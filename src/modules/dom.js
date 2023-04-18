@@ -26,10 +26,6 @@ export default (function Dom () {
         title.textContent = 'To Do It';
         title.classList.add('title');
         head.appendChild(title);
-        const projectsButton = document.createElement('button');
-        projectsButton.textContent = 'All Projects';
-        projectsButton.classList.add('all-proj-button');
-        head.appendChild(projectsButton);
     }
     const _renderSidebar = (project) => {
         _basicStructure.sidebar.innerHTML = '';
@@ -47,7 +43,7 @@ export default (function Dom () {
         _taskBtn = btn;
         _basicStructure.main.appendChild(btn);
     }
-    const _renderTaskCard = (task) => {
+    const _renderTaskCard = (task, project) => {
         const cardContainer = document.createElement('div');
         cardContainer.classList.add('card-container', task.getPriority());
 
@@ -57,6 +53,10 @@ export default (function Dom () {
         checkbox.classList.add('task-complete-check');
         checkbox.dataset.task = task.getTitle();
         checkbox.dataset.project = project.getTitle();
+        // checkbox checked by default if its completed
+        if (task.isComplete()) {
+            checkbox.checked = true;
+        }
         _checkBoxes.push(checkbox);
         cardContainer.appendChild(checkbox);
 
@@ -73,6 +73,7 @@ export default (function Dom () {
         _basicStructure.main.appendChild(cardContainer);
     }
     const _renderDashboard = (project) => {
+        _basicStructure.main.innerHTML = '';
         const title = document.createElement('h2');
         title.textContent = project.getTitle();
         title.classList.add('proj-title');
@@ -104,10 +105,8 @@ export default (function Dom () {
         PubSub.subscribe('task added', _taskSubscriber);
         _checkBoxes.forEach(checkbox => {
             checkbox.addEventListener('input', () => {
-                const task = Controller.findTask(checkbox.dataset.project, checkbox.dataset.task);
-                task.toggleComplete();
-                console.log(task.isComplete());
-            })
+                Controller.toggleTask(checkbox.dataset.project, checkbox.dataset.task);
+            });
         })
     }
     return { renderHome }

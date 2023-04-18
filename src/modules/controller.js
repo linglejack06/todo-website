@@ -28,21 +28,28 @@ export default (function Controller () {
         let correctProject;
         _projects.forEach(project => {
             if(project.getTitle() === title) {
+                console.log(`Title: ${title} Actual Project Title: ${project.getTitle()}`);
                 correctProject = project;
             }
         })
         return correctProject;
     }
-    const findTask = (taskTitle, projectTitle) => {
+    const findTask = (projectTitle, taskTitle) => {
         const project = findProject(projectTitle);
         let correctTask;
-        project.getTasks().forEach(task => {
+        const tasks = project.getTasks();
+        tasks.forEach(task => {
             if (task.getTitle() === taskTitle) {
                 correctTask = task;
             }
         });
         return correctTask;
     }
+    const toggleTask = (projectTitle, taskTitle) => {
+        const task = findTask(projectTitle, taskTitle);
+        task.toggleComplete();
+        console.log(task.isComplete());
+    }
     addTask('Home Project', 'Clean home', new Date('2012-02-12'), 'clean all rooms', 'green');
-    return { getDefaultProject, addNewProject, addTask, findProject, findTask };
+    return { getDefaultProject, addNewProject, addTask, findProject, findTask, toggleTask };
 }) ();
