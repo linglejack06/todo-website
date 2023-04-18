@@ -10,6 +10,29 @@ export default (function Dom () {
     let _deleteTaskBtn;
     let _taskFormBtn;
     let _projFormBtn;
+    const _taskForm = `
+        <h2 class='title'>New Task</h2>
+        <div class='input-container'>
+            <label for='task-name'>Task Title</label>
+            <input type='text' id='task-name' name='title' class='task-name'>
+        </div>
+        <div class='input-container'>
+            <label for='task-description'>Description</label>
+            <input type='text' id='task-description' name='description' class='task-description'>
+        </div>
+        <div class='input-container'>
+            <label for='task-date'>Due Date</label>
+            <input type='datetime-local' id='task-date' name='date' class='task-date'
+        </div>
+        <div class='input-container'>
+            <label for='task-priority'>Priority</label>
+            <select id='task-priority' name='priority'>
+                <option value='low'>Low</option>
+                <option value='medium'>Medium</option>
+                <option value='high'>High</option>
+            </select>
+        </div>
+    `;
     const _checkBoxes = [];
     const _basicStructure = (() => {
         const head = document.createElement('div');
@@ -98,6 +121,18 @@ export default (function Dom () {
             });
         }
         _renderTaskBtn(); 
+    }
+    const _renderTaskForm = () => {
+        _page.style.display = 'none';
+        const newPage = document.createElement('div');
+        newPage.classList.add('form-container');
+        const form = document.createElement('form');
+        form.classList.add('form');
+        form.innerHTML = _taskForm;
+        newPage.appendChild(form);
+    }
+    const _renderProjectForm = () => {
+        
     }
     const renderHome = () => {
         const defaultProject = Controller.getDefaultProject()
