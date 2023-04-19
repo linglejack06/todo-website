@@ -70,12 +70,14 @@ export default (function Dom () {
         title.classList.add('title');
         head.appendChild(title);
     }
-    const _renderSidebar = (project) => {
+    const _renderSidebar = (projects) => {
         _basicStructure.sidebar.innerHTML = '';
-        const proj = document.createElement('li');
-        proj.textContent = project.getTitle();
-        proj.classList.add('proj-link');
-        _projectList.appendChild(proj);
+        projects.forEach(project => {
+            const proj = document.createElement('li');
+            proj.textContent = project.getTitle();
+            proj.classList.add('proj-link');
+            _projectList.appendChild(proj);
+        })
         _basicStructure.sidebar.appendChild(_projectList);
         _addProjBtn = document.createElement('button');
         _addProjBtn.classList.add('new-proj-btn');
@@ -194,8 +196,9 @@ export default (function Dom () {
     const renderHome = () => {
         const defaultProject = Controller.getDefaultProject();
         _currentProj = defaultProject;
+        const projects = [defaultProject]
         _renderHead(_basicStructure.head);
-        _renderSidebar(defaultProject);
+        _renderSidebar(projects);
         _renderDashboard(defaultProject);
         _addEvents();
     }

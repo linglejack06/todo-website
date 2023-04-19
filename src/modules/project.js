@@ -1,6 +1,6 @@
-export default function Project (title) {
+export default function Project (title, tasks) {
     let _title = title;
-    let _tasks = [];
+    let _tasks = tasks;
     const setTitle = (title) => {
         _title = title;
     }

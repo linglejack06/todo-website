@@ -4,7 +4,7 @@ import PubSub from 'pubsub-js';
 import Storage from './storage';
 
 export default (function Controller () {
-    const _defaultProj = Project('Home Project');
+    const _defaultProj = Project('Home Project', []);
     const _projects = [];
     _projects.push(_defaultProj);
     const getDefaultProject = () => _defaultProj;
