@@ -27,7 +27,7 @@ export default (function Dom () {
         </div>
         <div class='input-container'>
             <label for='task-date'>Due Date</label>
-            <input type='datetime-local' id='task-date' name='date' class='task-date'
+            <input type='datetime-local' id='task-date' name='date' class='task-date'>
         </div>
         <div class='input-container'>
             <label for='task-priority'>Priority</label>
@@ -136,6 +136,8 @@ export default (function Dom () {
         form.classList.add('form');
         form.innerHTML = _taskForm;
         newPage.appendChild(form);
+        const body = document.querySelector('body');
+        body.appendChild(newPage);
         _taskFormBtn = document.getElementById('submit-task-btn');
         _closeTaskFormBtn = document.getElementById('close-task-form')
     }
@@ -151,7 +153,7 @@ export default (function Dom () {
         }
     }
     const _closeTaskForm = () => {
-        const newPage = document.querySelector('form-container');
+        const newPage = document.querySelector('.form-container');
         newPage.innerHTML = '';
         newPage.style.display = 'none';
         _page.style.display = 'grid';
@@ -186,15 +188,18 @@ export default (function Dom () {
         _deleteTaskBtn.addEventListener('click', () => {
             Controller.deleteTask(_deleteTaskBtn.dataset.project, _deleteTaskBtn.dataset.task);
         });
-        //listener for submitting task
-        _taskFormBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const taskInputs = _getFormInputs('task');
-            Controller.addTask(_currentProj.getTitle(), taskInputs.title, taskInputs.date, taskInputs.desc, taskInputs.priority);
-            _closeTaskForm();
-        })
-        // dont add the task only close the form
-        _closeTaskFormBtn.addEventListener('click', _closeTaskForm);
+        _addTaskBtn.addEventListener('click', () => {
+            console.log('clicked');
+            _renderTaskForm();
+            // only add listeners for buttons when they are rendered
+            _taskFormBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const taskInputs = _getFormInputs('task');
+                Controller.addTask(_currentProj.getTitle(), taskInputs.title, taskInputs.date, taskInputs.desc, taskInputs.priority);
+                _closeTaskForm();
+            })
+            _closeTaskFormBtn.addEventListener('click', _closeTaskForm);
+        });
     }
     return { renderHome }
 }) ();
