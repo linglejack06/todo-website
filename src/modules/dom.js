@@ -19,15 +19,15 @@ export default (function Dom () {
         </div>
         <div class='input-container'>
             <label for='task-name'>Task Title</label>
-            <input type='text' id='task-name' name='title' class='task-name'>
+            <input type='text' id='task-name' name='title' class='task-name' required>
         </div>
         <div class='input-container'>
             <label for='task-description'>Description</label>
-            <input type='text' id='task-description' name='description' class='task-description'>
+            <input type='text' id='task-description' name='description' class='task-description' required>
         </div>
         <div class='input-container'>
             <label for='task-date'>Due Date</label>
-            <input type='datetime-local' id='task-date' name='date' class='task-date'>
+            <input type='datetime-local' id='task-date' name='date' class='task-date' required>
         </div>
         <div class='input-container'>
             <label for='task-priority'>Priority</label>
@@ -143,10 +143,17 @@ export default (function Dom () {
     }
     const _getFormInputs = (type) => {
         if (type === 'task') {
-            const title = document.getElementById('task-title').value;
-            const desc = document.getElementById('task-description').value;
-            const date = document.getElementById('task-date').value;
-            const priority = document.getElementById('task-priority').value;
+            const titleInput = document.getElementById('task-name');
+            const descInput = document.getElementById('task-description');
+            const dateInput = document.getElementById('task-date');
+            const priorityInput = document.getElementById('task-priority');
+            const title = titleInput.value;
+            const desc = descInput.value;
+            let date = dateInput.value;
+            if (!date) {
+                date = '';
+            }
+            const priority = priorityInput.value;
             return { title, desc, date, priority }
         } else if (type === 'project') {
 
@@ -162,7 +169,8 @@ export default (function Dom () {
         
     }
     const renderHome = () => {
-        const defaultProject = Controller.getDefaultProject()
+        const defaultProject = Controller.getDefaultProject();
+        _currentProj = defaultProject;
         _renderHead(_basicStructure.head);
         _renderSidebar(defaultProject);
         _renderDashboard(defaultProject);
@@ -172,9 +180,11 @@ export default (function Dom () {
         _currentProj = proj;
         _renderSidebar(proj);
         _renderDashboard(proj);
+        _addEvents();
     }
     const _taskSubscriber = (msg, proj) => {
         _renderDashboard(proj)
+        _addEvents();
     }
     const _addEvents = () => {
         PubSub.subscribe('proj added', _projSubscriber);
@@ -195,8 +205,13 @@ export default (function Dom () {
             _taskFormBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const taskInputs = _getFormInputs('task');
-                Controller.addTask(_currentProj.getTitle(), taskInputs.title, taskInputs.date, taskInputs.desc, taskInputs.priority);
-                _closeTaskForm();
+                // checks if date input has a value;
+                if(taskInputs.date) {
+                    Controller.addTask(_currentProj.getTitle(), taskInputs.title, taskInputs.date, taskInputs.desc, taskInputs.priority);
+                    _closeTaskForm();
+                } else {
+                    alert('Date Must be Inputted');
+                }
             })
             _closeTaskFormBtn.addEventListener('click', _closeTaskForm);
         });
