@@ -9,6 +9,7 @@ export default (function Controller () {
     const getDefaultProject = () => _defaultProj;
     const addNewProject = (title) => {
         const proj = Project(title);
+        _projects.push(proj);
         // send to dom to rerender
         // console.log(proj);
         PubSub.publish('proj added', proj);

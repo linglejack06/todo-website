@@ -49,7 +49,7 @@ export default (function Dom () {
         <label for='project-title'>Project Title</label>
         <input type='text' id='project-title' name='projectTitle' class='project-name' required>
     </div>
-    <button type='submit' class='submit-btn' id='submit-task-btn'>Add Task</button>
+    <button type='submit' class='submit-btn' id='submit-proj-btn'>Add Project</button>
 `
     const _checkBoxes = [];
     const _basicStructure = (() => {
@@ -175,8 +175,7 @@ export default (function Dom () {
     }
     const _closeForm = () => {
         const newPage = document.querySelector('.form-container');
-        newPage.innerHTML = '';
-        newPage.style.display = 'none';
+        newPage.remove();
         _page.style.display = 'grid';
     }
     const _renderProjectForm = () => {
@@ -189,8 +188,8 @@ export default (function Dom () {
         newPage.appendChild(form);
         const body = document.querySelector('body');
         body.appendChild(newPage);
-        _projFormBtn = document.getElementById('submit-task-btn');
-        _closeProjFormBtn = document.getElementById('close-task-form');
+        _projFormBtn = document.getElementById('submit-proj-btn');
+        _closeProjFormBtn = document.getElementById('close-proj-form');
     }
     const renderHome = () => {
         const defaultProject = Controller.getDefaultProject();
@@ -229,11 +228,11 @@ export default (function Dom () {
                 e.preventDefault();
                 const taskInputs = _getFormInputs('task');
                 // checks if date input has a value;
-                if(taskInputs.date) {
+                if(taskInputs.date && taskInputs.title && taskInputs.desc) {
                     Controller.addTask(_currentProj.getTitle(), taskInputs.title, taskInputs.date, taskInputs.desc, taskInputs.priority);
                     _closeForm();
                 } else {
-                    alert('Date Must be Inputted');
+                    alert('All Fields must be filled in');
                 }
             })
             _closeTaskFormBtn.addEventListener('click', _closeForm);
@@ -246,7 +245,8 @@ export default (function Dom () {
                 Controller.addNewProject(projTitle);
                 _closeForm();
             })
-        })
+            _closeProjFormBtn.addEventListener('click', _closeForm);
+        });
     }
     return { renderHome }
 }) ();
