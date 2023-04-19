@@ -11,6 +11,7 @@ export default (function Dom () {
     let _taskFormBtn;
     let _closeTaskFormBtn;
     let _projFormBtn;
+    let _closeProjFormBtn;
     let _currentProj;
     const _taskForm = `
         <div class='form-header'>
@@ -39,6 +40,17 @@ export default (function Dom () {
         </div>
         <button type='submit' class='submit-btn' id='submit-task-btn'>Add Task</button>
     `;
+    const _projectForm = `
+    <div class='form-header'>
+        <h2 class='title'>New Project</h2>
+        <button type='button' class='close-form' id='close-proj-form'>X</button>
+    </div>
+    <div class='input-container'>
+        <label for='project-title'>Project Title</label>
+        <input type='text' id='project-title' name='projectTitle' class='project-name' required>
+    </div>
+    <button type='submit' class='submit-btn' id='submit-task-btn'>Add Task</button>
+`
     const _checkBoxes = [];
     const _basicStructure = (() => {
         const head = document.createElement('div');
@@ -156,17 +168,29 @@ export default (function Dom () {
             const priority = priorityInput.value;
             return { title, desc, date, priority }
         } else if (type === 'project') {
-
+            const titleInput = document.getElementById('project-title');
+            const title = titleInput.value;
+            return title;
         }
     }
-    const _closeTaskForm = () => {
+    const _closeForm = () => {
         const newPage = document.querySelector('.form-container');
         newPage.innerHTML = '';
         newPage.style.display = 'none';
         _page.style.display = 'grid';
     }
     const _renderProjectForm = () => {
-        
+        _page.style.display = 'none';
+        const newPage = document.createElement('div');
+        newPage.classList.add('form-container');
+        const form = document.createElement('form');
+        form.classList.add('form');
+        form.innerHTML = _projectForm;
+        newPage.appendChild(form);
+        const body = document.querySelector('body');
+        body.appendChild(newPage);
+        _projFormBtn = document.getElementById('submit-task-btn');
+        _closeProjFormBtn = document.getElementById('close-task-form');
     }
     const renderHome = () => {
         const defaultProject = Controller.getDefaultProject();
@@ -199,7 +223,6 @@ export default (function Dom () {
             Controller.deleteTask(_deleteTaskBtn.dataset.project, _deleteTaskBtn.dataset.task);
         });
         _addTaskBtn.addEventListener('click', () => {
-            console.log('clicked');
             _renderTaskForm();
             // only add listeners for buttons when they are rendered
             _taskFormBtn.addEventListener('click', (e) => {
@@ -208,13 +231,22 @@ export default (function Dom () {
                 // checks if date input has a value;
                 if(taskInputs.date) {
                     Controller.addTask(_currentProj.getTitle(), taskInputs.title, taskInputs.date, taskInputs.desc, taskInputs.priority);
-                    _closeTaskForm();
+                    _closeForm();
                 } else {
                     alert('Date Must be Inputted');
                 }
             })
-            _closeTaskFormBtn.addEventListener('click', _closeTaskForm);
+            _closeTaskFormBtn.addEventListener('click', _closeForm);
         });
+        _addProjBtn.addEventListener('click', () => {
+            _renderProjectForm();
+            _projFormBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const projTitle = _getFormInputs('project');
+                Controller.addNewProject(projTitle);
+                _closeForm();
+            })
+        })
     }
     return { renderHome }
 }) ();

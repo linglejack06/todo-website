@@ -1,6 +1,5 @@
 import Project from './project';
 import Task from './task';
-import Dom from './dom';
 import PubSub from 'pubsub-js';
 
 export default (function Controller () {
