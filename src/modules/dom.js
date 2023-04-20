@@ -54,6 +54,7 @@ export default (function Dom () {
     <button type='submit' class='submit-btn' id='submit-proj-btn'>Add Project</button>
 `
     const _checkBoxes = [];
+    const _projLinks = [];
     const _basicStructure = (() => {
         const head = document.createElement('div');
         head.classList.add('head');
@@ -80,7 +81,9 @@ export default (function Dom () {
             const proj = document.createElement('li');
             proj.textContent = project.getTitle();
             proj.classList.add('proj-link');
+            proj.dataset.project = project.getTitle();
             _projectList.appendChild(proj);
+            _projLinks.push(proj);
         })
         _basicStructure.sidebar.appendChild(_projectList);
         _addProjBtn = document.createElement('button');
@@ -230,6 +233,12 @@ export default (function Dom () {
                 Controller.toggleTask(checkbox.dataset.project, checkbox.dataset.task);
             });
         });
+        _projLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                const proj = Controller.findProject(link.dataset.project)
+                _renderDashboard(proj);
+            })
+        })
         _addTaskBtn.addEventListener('click', () => {
             _renderTaskForm();
             // only add listeners for buttons when they are rendered
