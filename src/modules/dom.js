@@ -74,7 +74,8 @@ export default (function Dom () {
     }
     const _renderSidebar = () => {
         const projects = Storage.getProjects();
-        console.log(projects)
+        _projectList.innerHTML = '';
+        console.log(projects.length)
         projects.forEach(project => {
             const proj = document.createElement('li');
             proj.textContent = project.getTitle();
