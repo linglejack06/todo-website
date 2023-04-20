@@ -6,7 +6,7 @@ export default (function Dom () {
     const _page = document.getElementById('content');
     const _projectList = document.createElement('ul');
     _projectList.classList.add('proj-list');
-    let _projects;
+    let _projects = Storage.getProjects();
     let _addProjBtn;
     let _addTaskBtn;
     let _deleteTaskBtn;
@@ -72,9 +72,9 @@ export default (function Dom () {
         title.classList.add('title');
         head.appendChild(title);
     }
-    const _renderSidebar = (projects) => {
-        console.log(projects);
-        _basicStructure.sidebar.innerHTML = '';
+    const _renderSidebar = () => {
+        const projects = Storage.getProjects();
+        console.log(projects)
         projects.forEach(project => {
             const proj = document.createElement('li');
             proj.textContent = project.getTitle();
@@ -198,25 +198,27 @@ export default (function Dom () {
         _projFormBtn = document.getElementById('submit-proj-btn');
         _closeProjFormBtn = document.getElementById('close-proj-form');
     }
-    const renderHome = (projects) => {
-        const defaultProject = Controller.getDefaultProject();
-        _currentProj = defaultProject;
-        _projects = projects;
+    const renderHome = () => {
+        _projects = Storage.getProjects();
         _renderHead(_basicStructure.head);
         _renderSidebar(_projects);
-        _renderDashboard(defaultProject);
+        _renderDashboard(_projects[0]);
         _addEvents();
     }
     const _projSubscriber = (msg, proj) => {
         _currentProj = proj;
-        _projects.push(proj);
-        _renderSidebar(_projects);
+        _renderSidebar();
         _renderDashboard(proj);
         _addEvents();
     }
     const _taskSubscriber = (msg, proj) => {
         _renderDashboard(proj)
         _addEvents();
+    }
+    const _addDeleteTaskEvent = () => {
+        _deleteTaskBtn.addEventListener('click', () => {
+            Controller.deleteTask(_deleteTaskBtn.dataset.project, _deleteTaskBtn.dataset.task);
+        });
     }
     const _addEvents = () => {
         PubSub.subscribe('proj added', _projSubscriber);
@@ -226,9 +228,6 @@ export default (function Dom () {
             checkbox.addEventListener('input', () => {
                 Controller.toggleTask(checkbox.dataset.project, checkbox.dataset.task);
             });
-        });
-        _deleteTaskBtn.addEventListener('click', () => {
-            Controller.deleteTask(_deleteTaskBtn.dataset.project, _deleteTaskBtn.dataset.task);
         });
         _addTaskBtn.addEventListener('click', () => {
             _renderTaskForm();

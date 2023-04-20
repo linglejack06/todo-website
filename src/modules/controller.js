@@ -4,18 +4,11 @@ import PubSub from 'pubsub-js';
 import Storage from './storage';
 
 export default (function Controller () {
-    const storage = Storage();
-    const _defaultProj = Project('Home Project', []);
-    storage.storeProject(_defaultProj);
-    const _projects = [];
-    _projects.push(_defaultProj);
-    const getDefaultProject = () => _defaultProj;
+    const _projects = Storage.getProjects();
     const addNewProject = (title) => {
         const proj = Project(title, []);
         _projects.push(proj);
-        // send to dom to rerender
-        // console.log(proj);
-        storage.storeProject(proj)
+        // send to dom to rerender + storage to store
         PubSub.publish('proj added', proj);
     }
     const addTask = (projectTitle, taskTitle, date, desc, priority) => {
@@ -60,6 +53,5 @@ export default (function Controller () {
         project.deleteTask(task);
         PubSub.publish('task deleted', project);
     }
-    addTask('Home Project', 'Clean home', new Date('2012-02-12'), 'clean all rooms', 'green');
-    return { getDefaultProject, addNewProject, addTask, findProject, findTask, toggleTask, deleteTask };
+    return { addNewProject, addTask, findProject, findTask, toggleTask, deleteTask };
 }) ();
