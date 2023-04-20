@@ -1,10 +1,12 @@
 import Controller from './controller';
 import PubSub from 'pubsub-js';
+import Storage from './storage';
 
 export default (function Dom () {
     const _page = document.getElementById('content');
     const _projectList = document.createElement('ul');
     _projectList.classList.add('proj-list');
+    let _projects;
     let _addProjBtn;
     let _addTaskBtn;
     let _deleteTaskBtn;
@@ -71,6 +73,7 @@ export default (function Dom () {
         head.appendChild(title);
     }
     const _renderSidebar = (projects) => {
+        console.log(projects);
         _basicStructure.sidebar.innerHTML = '';
         projects.forEach(project => {
             const proj = document.createElement('li');
@@ -177,6 +180,7 @@ export default (function Dom () {
     }
     const _closeForm = () => {
         const newPage = document.querySelector('.form-container');
+        newPage.style.display = 'none';
         newPage.remove();
         _page.style.display = 'grid';
     }
@@ -184,6 +188,7 @@ export default (function Dom () {
         _page.style.display = 'none';
         const newPage = document.createElement('div');
         newPage.classList.add('form-container');
+        newPage.style.display = 'block';
         const form = document.createElement('form');
         form.classList.add('form');
         form.innerHTML = _projectForm;
@@ -193,18 +198,19 @@ export default (function Dom () {
         _projFormBtn = document.getElementById('submit-proj-btn');
         _closeProjFormBtn = document.getElementById('close-proj-form');
     }
-    const renderHome = () => {
+    const renderHome = (projects) => {
         const defaultProject = Controller.getDefaultProject();
         _currentProj = defaultProject;
-        const projects = [defaultProject]
+        _projects = projects;
         _renderHead(_basicStructure.head);
-        _renderSidebar(projects);
+        _renderSidebar(_projects);
         _renderDashboard(defaultProject);
         _addEvents();
     }
     const _projSubscriber = (msg, proj) => {
         _currentProj = proj;
-        _renderSidebar(proj);
+        _projects.push(proj);
+        _renderSidebar(_projects);
         _renderDashboard(proj);
         _addEvents();
     }

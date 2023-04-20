@@ -4,15 +4,18 @@ import PubSub from 'pubsub-js';
 import Storage from './storage';
 
 export default (function Controller () {
+    const storage = Storage();
     const _defaultProj = Project('Home Project', []);
+    storage.storeProject(_defaultProj);
     const _projects = [];
     _projects.push(_defaultProj);
     const getDefaultProject = () => _defaultProj;
     const addNewProject = (title) => {
-        const proj = Project(title);
+        const proj = Project(title, []);
         _projects.push(proj);
         // send to dom to rerender
         // console.log(proj);
+        storage.storeProject(proj)
         PubSub.publish('proj added', proj);
     }
     const addTask = (projectTitle, taskTitle, date, desc, priority) => {

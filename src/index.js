@@ -1,3 +1,9 @@
+import Storage from './modules/storage';
 import Dom from './modules/dom';
 
-Dom.renderHome();
+const storage = Storage();
+
+const projects = storage.getProjects()
+Dom.renderHome(projects);
+
+

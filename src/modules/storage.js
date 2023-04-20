@@ -2,7 +2,7 @@ import PubSub from 'pubsub-js';
 import Project from './project';
 import Task from './task';
 
-export default (function Storage() {
+export default function Storage() {
     const _jsonProjects = []
     const storeProject = (project) => {
         const tasks = project.getTasks();
@@ -17,7 +17,7 @@ export default (function Storage() {
     }
     const getProjects = () => {
         const completeProjects = []
-        const projects = Object.assign(JSON.parse(localStorage.getItem('rpojects')))
+        const projects = Object.assign(JSON.parse(localStorage.getItem('projects')))
         projects.forEach(project => {
             const completeTasks = []
             const tasks = project.tasks;
@@ -25,16 +25,15 @@ export default (function Storage() {
                 completeTasks.push(Task(task.title, task.date, task.desc, task.priority))
             })
             const totalProj = Project(project.title, completeTasks)
+            completeProjects.push(totalProj);
         })
+        return completeProjects;
     }
     const _projSubscriber = (msg, project) => {
         storeProject(project);
-        getProjects();
     }
     const _taskSubscriber = (msg, project) => {
         storeProject(project)
     }
-    PubSub.subscribe('proj added', _projSubscriber);
-    PubSub.subscribe('task added', _taskSubscriber);
-    return {storeProject}
-}) ();
+    return {storeProject, getProjects}
+};
