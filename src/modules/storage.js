@@ -39,13 +39,34 @@ export default (function Storage() {
         console.log(completeProjects);
         return completeProjects;
     }
+    const deleteTask = (project) => {
+        let projects = JSON.parse(localStorage.getItem('projects'));
+        let modifiedProj;
+        projects.forEach(proj => {
+            if (proj.title === project.getTitle()) {
+                modifiedProj = proj;
+                const i = projects.findIndex((projectIndex) => projectIndex === proj);
+                projects.splice(i, 1);
+            }
+        })
+        modifiedProj.tasks = project.getTasks();
+        localStorage.removeItem('projects');
+        localStorage.setItem('projects', JSON.stringify(projects));
+        storeProject(Project(modifiedProj.title, modifiedProj.tasks));
+
+    }
     const _projSubscriber = (msg, project) => {
         storeProject(project);
     }
     const _taskSubscriber = (msg, project) => {
         storeProject(project)
     }
+    const _deleteTaskSubscriber = (msg, project) => {
+        console.log('start delete')
+        deleteTask(project);
+    }
     PubSub.subscribe('task added', _taskSubscriber);
-    PubSub.subscribe('proj added', _projSubscriber)
+    PubSub.subscribe('proj added', _projSubscriber);
+    PubSub.subscribe('task deleted', _deleteTaskSubscriber);
     return {storeProject, getProjects}
 }) ();

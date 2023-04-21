@@ -131,6 +131,7 @@ export default (function Dom () {
         btn.dataset.task = task.getTitle();
         btn.dataset.project = project.getTitle();
         _deleteTaskBtn = btn;
+        _addDeleteTaskEvent(btn);
         cardContainer.appendChild(btn);
 
         _basicStructure.main.appendChild(cardContainer);
@@ -204,6 +205,7 @@ export default (function Dom () {
     }
     const renderHome = () => {
         _projects = Storage.getProjects();
+        _currentProj = _projects[0];
         _renderHead(_basicStructure.head);
         _renderSidebar(_projects);
         _renderDashboard(_projects[0]);
@@ -219,9 +221,9 @@ export default (function Dom () {
         _renderDashboard(proj)
         _addEvents();
     }
-    const _addDeleteTaskEvent = () => {
-        _deleteTaskBtn.addEventListener('click', () => {
-            Controller.deleteTask(_deleteTaskBtn.dataset.project, _deleteTaskBtn.dataset.task);
+    const _addDeleteTaskEvent = (btn) => {
+        btn.addEventListener('click', () => {
+            Controller.deleteTask(btn.dataset.project, btn.dataset.task);
         });
     }
     const _addEvents = () => {
