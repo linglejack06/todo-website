@@ -11,7 +11,7 @@ export default (function Storage() {
         const tasks = project.getTasks();
         const jsonTasks = []
         tasks.forEach(task => {
-            jsonTasks.push({title: task.getTitle(), desc: task.getDesc(), priority: task.getPriority(), date: task.getDate().toString()})
+            jsonTasks.push({title: task.getTitle(), desc: task.getDesc(), priority: task.getPriority(), date: task.getDate().toString(), isCompleted: task.isComplete()})
         })
         const projObj = { title: project.getTitle(), tasks: jsonTasks }
         jsonProjects.push(projObj);
@@ -31,7 +31,7 @@ export default (function Storage() {
             const completeTasks = []
             const tasks = project.tasks;
             tasks.forEach (task => {
-                completeTasks.push(Task(task.title, task.date, task.desc, task.priority))
+                completeTasks.push(Task(task.title, task.date, task.desc, task.priority, task.isCompleted))
             })
             const totalProj = Project(project.title, completeTasks)
             completeProjects.push(totalProj);
@@ -74,6 +74,19 @@ export default (function Storage() {
         storeProject(Project(modifiedProj.title, modifiedProj.tasks));
 
     }
+    const updateTaskComplete = (project, task) => {
+        // iterate through projects to find specific project needed
+        // remove that project from projects
+        // remove projects from storage and replace with modified array
+        // find task that needs to be changed
+        // modify is completed value
+        // remove the task from tasks array
+        // remove the task from project tasks
+        // create new task with modified values
+        // add task to project tasks
+        // add project back to local storage using store project
+
+    }
     const _projSubscriber = (msg, project) => {
         storeProject(project);
     }
@@ -87,5 +100,5 @@ export default (function Storage() {
     PubSub.subscribe('task added', _taskSubscriber);
     PubSub.subscribe('proj added', _projSubscriber);
     PubSub.subscribe('task deleted', _deleteTaskSubscriber);
-    return {storeProject, getProjects, deleteTask}
+    return {storeProject, getProjects, deleteTask, updateTaskComplete}
 }) ();
