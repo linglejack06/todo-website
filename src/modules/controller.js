@@ -23,9 +23,10 @@ export default (function Controller () {
     }
     const findProject = (title) => {
         let correctProject;
+        console.log(_projects);
         _projects.forEach(project => {
             if(project.getTitle() === title) {
-                console.log(`Title: ${title} Actual Project Title: ${project.getTitle()}`);
+                //console.log(`Title: ${title} Actual Project Title: ${project.getTitle()}`);
                 correctProject = project;
             }
         })
@@ -45,7 +46,6 @@ export default (function Controller () {
     const toggleTask = (projectTitle, taskTitle) => {
         const task = findTask(projectTitle, taskTitle);
         task.toggleComplete();
-        console.log(task.isComplete());
     }
     const deleteTask = (projectTitle, taskTitle) => {
         const task = findTask(projectTitle, taskTitle);

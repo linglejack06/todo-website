@@ -39,6 +39,23 @@ export default (function Storage() {
         console.log(completeProjects);
         return completeProjects;
     }
+    const storeTask = (project) => {
+        let projects = JSON.parse(localStorage.getItem('projects'));
+        let modifiedProj;
+        projects.forEach(proj => {
+            if (proj.title === project.getTitle()) {
+                modifiedProj = proj;
+                const i = projects.findIndex((projectIndex) => projectIndex === proj)
+                projects.splice(i, 1);
+            }
+        })
+        modifiedProj.tasks = project.getTasks();
+        // temporarily add the projects array without modified
+        localStorage.removeItem('projects')
+        localStorage.setItem('projects', JSON.stringify(projects))
+        // add the modified
+        storeProject(Project(modifiedProj.title, modifiedProj.tasks))
+    }
     const deleteTask = (project) => {
         let projects = JSON.parse(localStorage.getItem('projects'));
         let modifiedProj;
@@ -50,8 +67,10 @@ export default (function Storage() {
             }
         })
         modifiedProj.tasks = project.getTasks();
+        // temporarily add projects to the storage without the modified one
         localStorage.removeItem('projects');
         localStorage.setItem('projects', JSON.stringify(projects));
+        // add the modified one
         storeProject(Project(modifiedProj.title, modifiedProj.tasks));
 
     }
@@ -59,7 +78,7 @@ export default (function Storage() {
         storeProject(project);
     }
     const _taskSubscriber = (msg, project) => {
-        storeProject(project)
+        storeTask(project)
     }
     const _deleteTaskSubscriber = (msg, project) => {
         console.log('start delete')
@@ -68,5 +87,5 @@ export default (function Storage() {
     PubSub.subscribe('task added', _taskSubscriber);
     PubSub.subscribe('proj added', _projSubscriber);
     PubSub.subscribe('task deleted', _deleteTaskSubscriber);
-    return {storeProject, getProjects}
+    return {storeProject, getProjects, deleteTask}
 }) ();

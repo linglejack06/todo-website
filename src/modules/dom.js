@@ -76,6 +76,7 @@ export default (function Dom () {
     const _renderSidebar = () => {
         const projects = Storage.getProjects();
         _projectList.innerHTML = '';
+        _basicStructure.sidebar.innerHTML = '';
         console.log(projects.length)
         projects.forEach(project => {
             const proj = document.createElement('li');
@@ -85,6 +86,7 @@ export default (function Dom () {
             _projectList.appendChild(proj);
             _projLinks.push(proj);
         })
+        console.log(_projectList)
         _basicStructure.sidebar.appendChild(_projectList);
         _addProjBtn = document.createElement('button');
         _addProjBtn.classList.add('new-proj-btn');
@@ -238,7 +240,9 @@ export default (function Dom () {
         _projLinks.forEach(link => {
             link.addEventListener('click', () => {
                 const proj = Controller.findProject(link.dataset.project)
+                _currentProj = proj;
                 _renderDashboard(proj);
+                _addEvents()
             })
         })
         _addTaskBtn.addEventListener('click', () => {
