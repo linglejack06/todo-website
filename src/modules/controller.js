@@ -45,7 +45,9 @@ export default (function Controller () {
     }
     const toggleTask = (projectTitle, taskTitle) => {
         const task = findTask(projectTitle, taskTitle);
+        const project = findProject(projectTitle)
         task.toggleComplete();
+        Storage.updateTaskComplete(project, task);
     }
     const deleteTask = (projectTitle, taskTitle) => {
         const task = findTask(projectTitle, taskTitle);

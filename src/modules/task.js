@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 
-export default function Task(title, dateInput, desc, priority) {
-    let _isCompleted = false;
+export default function Task(title, dateInput, desc, priority, isCompleted) {
+    let _isCompleted = isCompleted;
     let _title = title;
     // date input should be of type datetime-local
     let _date = new Date(dateInput);

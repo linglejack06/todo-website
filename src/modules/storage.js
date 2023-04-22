@@ -76,15 +76,35 @@ export default (function Storage() {
     }
     const updateTaskComplete = (project, task) => {
         // iterate through projects to find specific project needed
-        // remove that project from projects
+        let modifiedProj;
+        let projects = JSON.parse(localStorage.getItem('projects'));
+        projects.forEach(proj => {
+            if (proj.title === project.getTitle()) {
+                modifiedProj = proj;
+                // remove that project from projects
+                const i = projects.findIndex(projIndex => projIndex === proj);
+                projects.splice(i, 1);
+            }
+        })
         // remove projects from storage and replace with modified array
+        localStorage.removeItem('projects')
+        localStorage.setItem('projects', JSON.stringify(projects))
         // find task that needs to be changed
+        let modifiedTask;
+        modifiedProj.tasks.forEach(jsonTask => {
+            if (jsonTask.title === task.getTitle()) {
+                modifiedTask = jsonTask;
+                const i = modifiedProj.tasks.findIndex(taskIndex => taskIndex === jsonTask);
+                // remove old task
+                modifiedProj.tasks.splice(i, 1);
+            }
+            console.log(jsonTask);
+        })
         // modify is completed value
-        // remove the task from tasks array
-        // remove the task from project tasks
-        // create new task with modified values
-        // add task to project tasks
-        // add project back to local storage using store project
+        modifiedTask.isCompleted = task.isComplete();
+        console.log(modifiedTask)
+        modifiedProj.tasks.push(Task(modifiedTask.title, modifiedTask.date, modifiedTask.desc, modifiedTask.priority, modifiedTask.isComlete));
+        storeProject(Project(modifiedProj.title, modifiedProj.tasks));
 
     }
     const _projSubscriber = (msg, project) => {
