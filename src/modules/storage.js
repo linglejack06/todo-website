@@ -50,6 +50,7 @@ export default (function Storage() {
             }
         })
         modifiedProj.tasks = project.getTasks();
+        console.log(modifiedProj.tasks);
         // temporarily add the projects array without modified
         localStorage.removeItem('projects')
         localStorage.setItem('projects', JSON.stringify(projects))
@@ -91,19 +92,22 @@ export default (function Storage() {
         localStorage.setItem('projects', JSON.stringify(projects))
         // find task that needs to be changed
         let modifiedTask;
+        const completeTasks = []
         modifiedProj.tasks.forEach(jsonTask => {
+            // if its the right task then change priority
             if (jsonTask.title === task.getTitle()) {
                 modifiedTask = jsonTask;
                 const i = modifiedProj.tasks.findIndex(taskIndex => taskIndex === jsonTask);
                 // remove old task
                 modifiedProj.tasks.splice(i, 1);
+                const completeTask = Task(jsonTask.title, jsonTask.date, jsonTask.desc, jsonTask.priority, task.isComplete());
+                completeTasks.push(completeTask)
+            } else { //else just create the task back to the object and append to complete tasks
+                const completeTask = Task(jsonTask.title, jsonTask.date, jsonTask.desc, jsonTask.priority, jsonTask.isCompleted);
+                completeTasks.push(completeTask);
             }
-            console.log(jsonTask);
         })
-        // modify is completed value
-        modifiedTask.isCompleted = task.isComplete();
-        console.log(modifiedTask)
-        modifiedProj.tasks.push(Task(modifiedTask.title, modifiedTask.date, modifiedTask.desc, modifiedTask.priority, modifiedTask.isComlete));
+        modifiedProj.tasks = completeTasks;
         storeProject(Project(modifiedProj.title, modifiedProj.tasks));
 
     }
