@@ -116,17 +116,18 @@ export default (function Dom () {
         }
         _checkBoxes.push(checkbox);
         cardContainer.appendChild(checkbox);
-
+        const titleDateContainer = document.createElement('div');
+        titleDateContainer.classList.add('title-date-container');
         const title = document.createElement('h3');
         title.classList.add('task-title');
         title.textContent = task.getTitle();
-        cardContainer.appendChild(title);
+        titleDateContainer.appendChild(title);
 
         const date = document.createElement('h3');
         date.classList.add('task-date');
         date.textContent = task.getFormattedDate();
-        cardContainer.appendChild(date);
-
+        titleDateContainer.appendChild(date);
+        cardContainer.appendChild(titleDateContainer);
         const btn = document.createElement('button');
         btn.classList.add('delete-task-btn');
         btn.textContent = 'X';
