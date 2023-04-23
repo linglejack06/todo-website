@@ -233,6 +233,12 @@ export default (function Dom () {
         PubSub.subscribe('proj added', _projSubscriber);
         PubSub.subscribe('task added', _taskSubscriber);
         PubSub.subscribe('task deleted', _taskSubscriber);
+        const taskCards = documnet.querySelectorAll('.card-container');
+        taskCards.forEach(card => {
+            card.addEventListener('hover', (e) => {
+                
+            })
+        })
         _checkBoxes.forEach(checkbox => {
             checkbox.addEventListener('input', () => {
                 Controller.toggleTask(checkbox.dataset.project, checkbox.dataset.task);
