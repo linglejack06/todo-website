@@ -103,6 +103,8 @@ export default (function Dom () {
     const _renderTaskCard = (task, project) => {
         const cardContainer = document.createElement('div');
         cardContainer.classList.add('card-container', task.getPriority());
+        cardContainer.dataset.task = task.getTitle();
+        cardContainer.dataset.project = project.getTitle();
 
         const checkbox = document.createElement('input');
         checkbox.setAttribute('type', 'checkbox');
@@ -116,6 +118,8 @@ export default (function Dom () {
         }
         _checkBoxes.push(checkbox);
         cardContainer.appendChild(checkbox);
+        const mainContainer = document.createElement('div');
+        mainContainer.classList.add('text-container');
         const titleDateContainer = document.createElement('div');
         titleDateContainer.classList.add('title-date-container');
         const title = document.createElement('h3');
@@ -127,7 +131,16 @@ export default (function Dom () {
         date.classList.add('task-date');
         date.textContent = task.getFormattedDate();
         titleDateContainer.appendChild(date);
-        cardContainer.appendChild(titleDateContainer);
+        mainContainer.appendChild(titleDateContainer);
+
+        const desc = document.createElement('p');
+        desc.classList.add('task-desc');
+        desc.setAttribute('id', task.getTitle());
+        desc.textContent = task.getDesc();
+        desc.classList.add('active');
+        mainContainer.appendChild(desc);
+        cardContainer.appendChild(mainContainer);
+
         const btn = document.createElement('button');
         btn.classList.add('delete-task-btn');
         btn.textContent = 'X';
@@ -233,10 +246,18 @@ export default (function Dom () {
         PubSub.subscribe('proj added', _projSubscriber);
         PubSub.subscribe('task added', _taskSubscriber);
         PubSub.subscribe('task deleted', _taskSubscriber);
-        const taskCards = documnet.querySelectorAll('.card-container');
+        const taskCards = document.querySelectorAll('.card-container');
         taskCards.forEach(card => {
-            card.addEventListener('hover', (e) => {
-                
+            card.addEventListener('click', () => {
+                const desc = document.getElementById(card.dataset.task);
+                // control visibility of full card aka showing description
+                if (desc.classList.contains('hidden')) {
+                    desc.classList.remove('hidden');
+                    desc.classList.add('active');
+                } else if (desc.classList.contains('active')) {
+                    desc.classList.remove('active');
+                    desc.classList.add('hidden');
+                }
             })
         })
         _checkBoxes.forEach(checkbox => {

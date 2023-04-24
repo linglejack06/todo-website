@@ -57,6 +57,12 @@ li:hover {
 .proj-title {
     padding: 16px;
 }
+.hidden {
+    display: none;
+}
+.active {
+    display: block;
+}
 .card-container {
     display: flex;
     background-color: #fb8500;
