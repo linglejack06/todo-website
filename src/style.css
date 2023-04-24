@@ -115,3 +115,13 @@ button:hover {
     justify-content: space-between;
     align-items: center;
 }
+.text-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    align-items: start;
+}
+.task-desc {
+    font-size: 1.5rem;
+    margin: 8px;
+}

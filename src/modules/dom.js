@@ -137,7 +137,6 @@ export default (function Dom () {
         desc.classList.add('task-desc');
         desc.setAttribute('id', task.getTitle());
         desc.textContent = task.getDesc();
-        desc.classList.add('active');
         mainContainer.appendChild(desc);
         cardContainer.appendChild(mainContainer);
 
@@ -238,7 +237,8 @@ export default (function Dom () {
         _addEvents();
     }
     const _addDeleteTaskEvent = (btn) => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (event) => {
+            event.stopImmediatePropagation();
             Controller.deleteTask(btn.dataset.project, btn.dataset.task);
         });
     }
@@ -257,11 +257,14 @@ export default (function Dom () {
                 } else if (desc.classList.contains('active')) {
                     desc.classList.remove('active');
                     desc.classList.add('hidden');
+                } else {
+                    desc.classList.add('active');
                 }
             })
         })
         _checkBoxes.forEach(checkbox => {
-            checkbox.addEventListener('input', () => {
+            checkbox.addEventListener('input', (event) => {
+                event.stopImmediatePropagation();
                 Controller.toggleTask(checkbox.dataset.project, checkbox.dataset.task);
             });
         });
